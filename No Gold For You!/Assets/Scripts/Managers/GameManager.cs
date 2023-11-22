@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : TManager<GameManager> {
@@ -10,15 +8,16 @@ public class GameManager : TManager<GameManager> {
     // Global referneces
     public Transform player { get; private set; }
 
-    public GameState currState;
+    public GameState currState { get; private set; }
 
     // Global events
-    public event Action<GameState> OnBeforeStateChange;
-    public event Action<GameState> OnAfterStateChange;
+    public static event Action<GameState> OnBeforeStateChange;
+    public static event Action<GameState> OnAfterStateChange;
 	
     void Start() {
         ChangeState(GameState.LoadingLevel);
         ChangeState(GameState.Initializing);
+        ChangeState(GameState.Playing);
     }
 
     void Update() {
@@ -26,7 +25,7 @@ public class GameManager : TManager<GameManager> {
     }
 
     public void ChangeState(GameState state) {
-        OnBeforeStateChange(state);
+        OnBeforeStateChange?.Invoke(state);
         currState = state;
 
         switch (state) {
@@ -35,15 +34,19 @@ public class GameManager : TManager<GameManager> {
             case GameState.Initializing:
 				player = GameObject.FindGameObjectWithTag("Player").transform;
 				break;
-            case GameState.Playing: 
+            case GameState.Playing:
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
                 break;
             case GameState.Paused:
-                break;
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+				break;
             case GameState.Escaped:
                 break;
         }
 
-        OnAfterStateChange(state);
+        OnAfterStateChange?.Invoke(state);
     }
 }
 

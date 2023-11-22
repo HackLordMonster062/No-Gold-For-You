@@ -5,8 +5,11 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour {
-	[Header("Speeds")]
+	[Header("Values")]
 	[SerializeField] float walkSpeed;
+	[SerializeField] float sensitivity;
+	[SerializeField] float lowBound;
+	[SerializeField] float highBound;
 
 	[Header("Physics")]
 	[SerializeField] float mass;
@@ -16,40 +19,52 @@ public class PlayerMovement : MonoBehaviour {
 	CharacterController _controller;
 
 	// Runtime
-	Vector3 _input;
 	Vector3 _direction;
 	Vector3 _velocity;
 	RaycastHit _groundCheckInfo;
 
-	bool isGrounded;
+	Transform _cameraRef;
+
+	bool _isGrounded;
+
+	float _xInput, _yInput;
+	float _xRotation, _yRotation;
 
 	private void Awake() {
-		GameManager.Instance.OnBeforeStateChange += Init;
+		GameManager.OnBeforeStateChange += Init;
 	}
 
 	void Init(GameState state) {
 		if (state != GameState.Initializing) return;
 
 		_controller = GetComponent<CharacterController>();
+		_cameraRef = Camera.main.transform;
 	}
 
 	void Update() {
 		if (GameManager.Instance.currState != GameState.Playing) return;
 
-		isGrounded = Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out _groundCheckInfo, _controller.height / 2 + .1f - groundCheckRadius);
+		_isGrounded = Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out _groundCheckInfo, _controller.height / 2 + .1f - groundCheckRadius);
 
-		_input = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
-		_input = Vector3.ClampMagnitude(_input, 1);
-
-		transform.GetChild(0).localScale = new Vector3(1, _controller.height / 2, 1);
+		_direction = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+		_direction = Vector3.ClampMagnitude(_direction, 1);
 
 		ApplyGravity(GameManager.Instance.gravity, -2f);
 
 		_controller.Move((_velocity + _direction * walkSpeed) * Time.deltaTime);
+
+		_xInput = Input.GetAxis("Mouse X") * sensitivity;
+		_yInput = -Input.GetAxis("Mouse Y") * sensitivity;
+
+		_xRotation += _xInput;
+		_yRotation = Mathf.Clamp(_yRotation + _yInput, lowBound, highBound);
+
+		transform.rotation = Quaternion.Euler(0f, _xRotation, 0);
+		_cameraRef.localRotation = Quaternion.Euler(_yRotation, 0, 0);
 	}
 
 	void ApplyGravity(float gravity, float defaultValue) {
-		if (!isGrounded) {
+		if (!_isGrounded) {
 			_velocity.y -= gravity / mass;
 		} else {
 			_velocity.y = defaultValue;

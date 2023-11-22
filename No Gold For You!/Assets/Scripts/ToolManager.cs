@@ -1,11 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ToolManager : MonoBehaviour {
+    public int bombs { get; private set; }
 	public Tool currTool { get; private set; }
     Transform _currToolRef;
+
+    [SerializeField] float reach;
+    [SerializeField] float throwingForce;
 
     [SerializeField] Transform pickaxe;
     [SerializeField] Transform bomb;
@@ -13,9 +14,11 @@ public class ToolManager : MonoBehaviour {
 
     [SerializeField] GameObject bombPrefab;
     [SerializeField] GameObject goldPrefab;
+
+    Transform _cameraRef;
 	
     void Awake() {
-        GameManager.Instance.OnBeforeStateChange += Init;
+        GameManager.OnBeforeStateChange += Init;
 	}
 
     void Init(GameState state) {
@@ -23,6 +26,9 @@ public class ToolManager : MonoBehaviour {
 
 		currTool = Tool.Pickaxe;
 		_currToolRef = pickaxe;
+
+        _cameraRef = Camera.main.transform;
+        bombs = 5;
 	}
 
     void Update() {
@@ -32,7 +38,7 @@ public class ToolManager : MonoBehaviour {
             case Tool.Pickaxe:
                 if (Input.GetMouseButtonDown(0)) {
                     Mine();
-                } else if (Input.GetMouseButtonDown(1)) {
+                } else if (Input.GetMouseButtonDown(1) && bombs > 0) {
                     currTool = Tool.Bomb;
                 }
 
@@ -79,11 +85,19 @@ public class ToolManager : MonoBehaviour {
     }
 
     void Mine() {
+        Ray ray = new Ray(_cameraRef.position, _cameraRef.forward);
 
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, reach) && hitInfo.collider.CompareTag("MiningSpot")) {
+            MiningSpot miningSpot = hitInfo.collider.GetComponent<MiningSpot>();
+
+            if (miningSpot != null && miningSpot.Mine()) {
+                ChangeTool(Tool.Gold);
+            }
+        }
     }
 
     void ThrowBomb() {
-
+        
     }
 
     void ThrowGold() {
