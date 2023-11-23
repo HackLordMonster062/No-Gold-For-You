@@ -7,8 +7,12 @@ public class MiningSpot : MonoBehaviour {
     [SerializeField] int maxIntegrity;
 
     int _integrity;
-	
-    public bool Mine() {
+
+	private void Awake() {
+		_integrity = maxIntegrity;
+	}
+
+	public bool Mine() {
         _integrity--;
 
         if (_integrity == 0) {

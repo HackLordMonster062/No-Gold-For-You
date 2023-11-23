@@ -24,8 +24,7 @@ public class ToolManager : MonoBehaviour {
     void Init(GameState state) {
         if (state != GameState.Initializing) return;
 
-		currTool = Tool.Pickaxe;
-		_currToolRef = pickaxe;
+        ChangeTool(Tool.Pickaxe);
 
         _cameraRef = Camera.main.transform;
         bombs = 5;
@@ -39,26 +38,32 @@ public class ToolManager : MonoBehaviour {
                 if (Input.GetMouseButtonDown(0)) {
                     Mine();
                 } else if (Input.GetMouseButtonDown(1) && bombs > 0) {
-                    currTool = Tool.Bomb;
+                    ChangeTool(Tool.Bomb);
                 }
 
                 break;
             case Tool.Bomb:
 				if (Input.GetMouseButtonDown(1)) {
 					ThrowBomb();
+
+					if (bombs == 0)
+						ChangeTool(Tool.Pickaxe);
 				} else if (Input.GetMouseButtonDown(0)) {
-					currTool = Tool.Pickaxe;
+                    ChangeTool(Tool.Pickaxe);
 				}
 
 				break;
             case Tool.Gold:
                 if (Input.GetMouseButtonDown(0)) {
                     ThrowGold();
-                    currTool = Tool.Pickaxe;
-                } else if (Input.GetMouseButtonDown(1)) {
+					ChangeTool(Tool.Pickaxe);
+				} else if (Input.GetMouseButtonDown(1)) {
                     ThrowGold();
-                    currTool = Tool.Bomb;
-                }
+                    if (bombs > 0)
+						ChangeTool(Tool.Bomb);
+					else
+						ChangeTool(Tool.Pickaxe);
+				}
 
 				break;
         }
@@ -67,7 +72,8 @@ public class ToolManager : MonoBehaviour {
     void ChangeTool(Tool tool) {
         currTool = tool;
 
-        _currToolRef.gameObject.SetActive(false);
+        if (_currToolRef != null)
+            _currToolRef.gameObject.SetActive(false);
 
         switch (tool) {
             case Tool.Pickaxe:
@@ -91,18 +97,23 @@ public class ToolManager : MonoBehaviour {
             MiningSpot miningSpot = hitInfo.collider.GetComponent<MiningSpot>();
 
             if (miningSpot != null && miningSpot.Mine()) {
+                print(miningSpot);
                 ChangeTool(Tool.Gold);
             }
         }
     }
 
     void ThrowBomb() {
-        
+        Rigidbody bombRB = Instantiate(bombPrefab, bomb.position, bomb.rotation).GetComponent<Rigidbody>();
+        bombRB.AddForce(bomb.forward * throwingForce);
+
+        bombs--;
     }
 
     void ThrowGold() {
-
-    }
+		Rigidbody goldRB = Instantiate(goldPrefab, gold.position, gold.rotation).GetComponent<Rigidbody>();
+		goldRB.AddForce(gold.forward * throwingForce);
+	}
 }
 
 public enum Tool {
