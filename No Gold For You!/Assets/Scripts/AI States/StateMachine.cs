@@ -19,6 +19,10 @@ public class StateMachine {
 
 	TState _nextState;
 
+	public StateMachine(TState InitialState) {
+		ChangeState(InitialState);
+	}
+
 	public void ChangeState(TState newState) {
 		if (currState != null) {
 			currState.Exit();
