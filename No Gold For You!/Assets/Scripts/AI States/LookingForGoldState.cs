@@ -1,4 +1,4 @@
-
+using System;
 
 public class LookingForGoldState : TState {
 	MiningSpot _currMiningSpot;
@@ -10,7 +10,7 @@ public class LookingForGoldState : TState {
 		
 	}
 
-	public override TState Update() {
-		return null;
+	public override Type Update() {
+		return typeof(MiningState);
 	}
 }

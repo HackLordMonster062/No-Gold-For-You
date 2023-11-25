@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TState {
@@ -9,26 +11,27 @@ public class TState {
 
 	public virtual void Enter() { }
 
-	public virtual TState Update() { return null; }
+	public virtual Type Update() { return null; }
 
 	public virtual void Exit() { }
 }
 
 public class StateMachine {
 	public TState currState { get; private set; }
+	public Dictionary<Type, TState> statePool;
 
-	TState _nextState;
+	Type _nextState;
 
-	public StateMachine(TState InitialState) {
-		ChangeState(InitialState);
+	public StateMachine() {
+		
 	}
 
-	public void ChangeState(TState newState) {
+	public void ChangeState(Type newState) {
 		if (currState != null) {
 			currState.Exit();
 		}
 
-		currState = newState;
+		currState = statePool[newState];
 
 		currState.Enter();
 	}
@@ -37,9 +40,13 @@ public class StateMachine {
 		if (currState != null) {
 			_nextState = currState.Update();
 
-			if (_nextState != null ) {
+			if (_nextState != null) {
 				ChangeState(_nextState);
 			}
 		}
+	}
+
+	public void AddState(TState newState) {
+		statePool[newState.GetType()] = newState;
 	}
 }
