@@ -13,6 +13,7 @@ public class NeutralState : TState {
 	}
 
 	public override Type Update() {
+		_neutralSM.Update();
 		return null; // Suspicious state
 	}
 }

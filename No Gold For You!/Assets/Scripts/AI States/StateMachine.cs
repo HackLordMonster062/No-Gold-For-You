@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TState {
-	MinerController _owner;
+	protected MinerController _owner;
 
 	public TState(MinerController owner) {
 		_owner = owner;
@@ -23,7 +23,7 @@ public class StateMachine {
 	Type _nextState;
 
 	public StateMachine() {
-		
+		statePool = new Dictionary<Type, TState>();
 	}
 
 	public void ChangeState(Type newState) {
@@ -48,5 +48,9 @@ public class StateMachine {
 
 	public void AddState(TState newState) {
 		statePool[newState.GetType()] = newState;
+
+		if (currState == null) {
+			ChangeState(newState.GetType());
+		}
 	}
 }

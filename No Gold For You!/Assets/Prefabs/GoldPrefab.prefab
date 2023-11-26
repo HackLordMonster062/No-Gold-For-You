@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6548697216908400413}
   m_Layer: 0
   m_Name: GoldPrefab
-  m_TagString: Untagged
+  m_TagString: PlayerGold
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
