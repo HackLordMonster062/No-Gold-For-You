@@ -10,8 +10,13 @@ public class MinerController : MonoBehaviour {
     public MiningSpot currMiningSpot { get; set; }
     public Crate currCrate { get; set; }
 
+    [Header("Navigation")]
     public float stoppingDistance;
     public float followingDistance;
+
+    [Header("Vision")]
+    [SerializeField] float visionAngle;
+    [SerializeField] float visionDistance;
 
     StateMachine _stateMachine;
 	
@@ -29,6 +34,21 @@ public class MinerController : MonoBehaviour {
 	}
 
     void Update() {
-        _stateMachine?.Update();
+		if (GameManager.Instance.currState != GameState.Playing) return;
+
+        if (IsPlayerInVision())
+            CheckPlayer();
+
+		_stateMachine?.Update();
     }
+
+    void CheckPlayer() {
+        switch (true) {
+
+        }
+    }
+
+    bool IsPlayerInVision() {
+        return Vector3.Distance(GameManager.Instance.player.position, transform.position) <= visionDistance && Vector3.Angle(GameManager.Instance.player.position - transform.position, transform.forward) <= visionAngle;
+	}
 }
