@@ -4,7 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SuspicionManager : TManager<SuspicionManager> {
-	public int SuspicionLevel { get; private set; }
+    [SerializeField] float suspicionRate;
+    [SerializeField] float suspicionFadingRate;
+    [SerializeField] float suspicionPenaltyAmount;
+
+	public int suspicionLevel { get; private set; }
+    public int suspectingMiners { get; set; }
 
     float _suspicionLevelRaw;
 	
@@ -13,7 +18,18 @@ public class SuspicionManager : TManager<SuspicionManager> {
     }
 
     void Update() {
+        _suspicionLevelRaw -= suspicionFadingRate * Time.deltaTime;
+        _suspicionLevelRaw += suspicionRate * suspectingMiners * Time.deltaTime;
+
         _suspicionLevelRaw = Mathf.Clamp(_suspicionLevelRaw, 0, 3);
-        SuspicionLevel = (int)_suspicionLevelRaw;
+        suspicionLevel = (int)_suspicionLevelRaw;
+    }
+
+    public void Penalty(float amount) {
+        _suspicionLevelRaw += amount;
+    }
+
+    public void Penalty() {
+        _suspicionLevelRaw += suspicionPenaltyAmount;
     }
 }

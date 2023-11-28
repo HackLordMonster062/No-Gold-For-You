@@ -1,6 +1,10 @@
+using System;
 using UnityEngine;
 
 public class ToolManager : MonoBehaviour {
+    public static event Action OnPlayerMined;
+    public static event Action OnPlayerDumped;
+
     public int bombs { get; private set; }
 	public Tool currTool { get; private set; }
     Transform _currToolRef;
@@ -37,6 +41,8 @@ public class ToolManager : MonoBehaviour {
             case Tool.Pickaxe:
                 if (Input.GetMouseButtonDown(0)) {
                     Mine();
+
+                    OnPlayerMined?.Invoke();
                 } else if (Input.GetMouseButtonDown(1) && bombs > 0) {
                     ChangeTool(Tool.Bomb);
                 }
@@ -48,6 +54,8 @@ public class ToolManager : MonoBehaviour {
 
 					if (bombs == 0)
 						ChangeTool(Tool.Pickaxe);
+
+                    OnPlayerDumped?.Invoke();
 				} else if (Input.GetMouseButtonDown(0)) {
                     ChangeTool(Tool.Pickaxe);
 				}

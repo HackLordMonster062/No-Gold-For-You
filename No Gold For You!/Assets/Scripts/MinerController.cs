@@ -20,42 +20,30 @@ public class MinerController : MonoBehaviour {
 
     StateMachine _stateMachine;
 	
-    void Start() {
+    void Awake() {
         GameManager.OnBeforeStateChange += Init;
-        navAgent = GetComponent<NavMeshAgent>();
     }
 
     void Init(GameState state) {
         if (state != GameState.Initializing) return;
 
+		navAgent = GetComponent<NavMeshAgent>();
+
 		_stateMachine = new StateMachine();
 
 		_stateMachine.AddState(new NeutralState(this));
+        _stateMachine.AddState(new SuspiciousState(this));
 	}
 
     void Update() {
 		if (GameManager.Instance.currState != GameState.Playing) return;
 
-        if (IsPlayerInVision())
-            CheckPlayer();
-
 		_stateMachine?.Update();
     }
 
-    void CheckPlayer() {
-        switch (SuspicionManager.Instance.SuspicionLevel) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-        }
-    }
+     public bool IsPlayerInVision() {
+        Vector3 distanceVector = GameManager.Instance.player.position - transform.position;
 
-    bool IsPlayerInVision() {
-        return Vector3.Distance(GameManager.Instance.player.position, transform.position) <= visionDistance && Vector3.Angle(GameManager.Instance.player.position - transform.position, transform.forward) <= visionAngle;
+		return distanceVector.magnitude <= visionDistance && Vector3.Angle(distanceVector, transform.forward) <= visionAngle;
 	}
 }

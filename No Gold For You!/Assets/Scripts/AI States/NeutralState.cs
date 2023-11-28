@@ -12,8 +12,20 @@ public class NeutralState : TState {
 		_neutralSM.AddState(new DumpingState(owner));
 	}
 
+	public override void Enter() {
+		_neutralSM.currState.Enter();
+	}
+
 	public override Type Update() {
 		_neutralSM.Update();
-		return null; // Suspicious state
+
+		if (_owner.IsPlayerInVision() && GameManager.Instance.toolManager.currTool == Tool.Bomb)
+			return typeof(SuspiciousState);
+
+		return null;
+	}
+
+	public override void Exit() {
+		_neutralSM.currState.Exit();
 	}
 }

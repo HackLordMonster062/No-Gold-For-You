@@ -5,12 +5,11 @@ public class LookingForGoldState : TState {
 	Transform _currMiningSpot;
 
 	public LookingForGoldState(MinerController owner) : base(owner) {
-		_currMiningSpot = GameObject.FindWithTag("MiningSpot").transform;
 	}
 
 	public override void Enter() {
 		foreach (GameObject miningSpot in GameObject.FindGameObjectsWithTag("MiningSpot")) {
-			if (Vector3.Distance(miningSpot.transform.position, _owner.transform.position) < Vector3.Distance(_currMiningSpot.position, _owner.transform.position)) {
+			if (_currMiningSpot == null || Vector3.Distance(miningSpot.transform.position, _owner.transform.position) < Vector3.Distance(_currMiningSpot.position, _owner.transform.position)) {
 				_currMiningSpot = miningSpot.transform;
 			}
 		}

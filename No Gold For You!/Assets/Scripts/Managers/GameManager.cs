@@ -7,6 +7,7 @@ public class GameManager : TManager<GameManager> {
 
     // Global referneces
     public Transform player { get; private set; }
+    public ToolManager toolManager { get; private set; }
 
     public GameState currState { get; private set; }
 
@@ -33,6 +34,7 @@ public class GameManager : TManager<GameManager> {
                 break;
             case GameState.Initializing:
 				player = GameObject.FindGameObjectWithTag("Player").transform;
+				toolManager = player.GetComponent<ToolManager>();
 				break;
             case GameState.Playing:
                 Cursor.lockState = CursorLockMode.Locked;
