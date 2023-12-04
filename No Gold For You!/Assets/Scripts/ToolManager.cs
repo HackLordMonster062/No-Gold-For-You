@@ -4,6 +4,7 @@ using UnityEngine;
 public class ToolManager : MonoBehaviour {
     public static event Action OnPlayerMined;
     public static event Action OnPlayerDumped;
+    public static event Action OnPlayerDroppedBomb;
 
     public int bombs { get; private set; }
 	public Tool currTool { get; private set; }
@@ -55,7 +56,7 @@ public class ToolManager : MonoBehaviour {
 					if (bombs == 0)
 						ChangeTool(Tool.Pickaxe);
 
-                    OnPlayerDumped?.Invoke();
+                    OnPlayerDroppedBomb?.Invoke();
 				} else if (Input.GetMouseButtonDown(0)) {
                     ChangeTool(Tool.Pickaxe);
 				}
@@ -63,9 +64,11 @@ public class ToolManager : MonoBehaviour {
 				break;
             case Tool.Gold:
                 if (Input.GetMouseButtonDown(0)) {
+                    OnPlayerDumped?.Invoke();
                     ThrowGold();
 					ChangeTool(Tool.Pickaxe);
 				} else if (Input.GetMouseButtonDown(1)) {
+                    OnPlayerDumped?.Invoke();
                     ThrowGold();
                     if (bombs > 0)
 						ChangeTool(Tool.Bomb);
