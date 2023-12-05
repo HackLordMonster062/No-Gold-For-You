@@ -5,5 +5,5 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "GridPreset", menuName = "GridPreset")]
 public class GridPreset : ScriptableObject {
-	public Vector3[] gridPositions;
+	public Vector2[] gridPositions;
 }
