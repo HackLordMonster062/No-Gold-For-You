@@ -57,12 +57,12 @@ public class GameManager : TManager<GameManager> {
 				break;
             case GameState.LevelEnd:
                 Time.timeScale = 0;
+				Debug.Log(ExplosionManager.Instance.Explode());
                 break;
             case GameState.Escaped:
                 ChangeState(GameState.LevelEnd);
                 break;
             case GameState.TimeUp:
-				ExplosionManager.Instance.Explode();
 				ChangeState(GameState.LevelEnd);
                 break;
             case GameState.Caught:
