@@ -18,11 +18,17 @@ public class SuspicionManager : TManager<SuspicionManager> {
     }
 
     void Update() {
+        if (GameManager.Instance.currState != GameState.Playing) return;
+
         _suspicionLevelRaw -= suspicionFadingRate * Time.deltaTime;
         _suspicionLevelRaw += suspicionRate * suspectingMiners * Time.deltaTime;
 
         _suspicionLevelRaw = Mathf.Clamp(_suspicionLevelRaw, 0, 3);
         suspicionLevel = (int)_suspicionLevelRaw;
+
+        if (suspicionLevel == 3) {
+            GameManager.Instance.ChangeState(GameState.Caught);
+        }
     }
 
     public void Penalty(float amount) {

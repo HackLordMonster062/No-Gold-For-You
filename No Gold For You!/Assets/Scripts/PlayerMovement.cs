@@ -39,6 +39,8 @@ public class PlayerMovement : MonoBehaviour {
 
 		_controller = GetComponent<CharacterController>();
 		_cameraRef = Camera.main.transform;
+
+		_xRotation = 90;
 	}
 
 	void Update() {

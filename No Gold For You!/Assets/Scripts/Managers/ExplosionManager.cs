@@ -12,12 +12,16 @@ public class ExplosionManager : TManager<ExplosionManager> {
 	public bool _showGizmos;
 
 	void Start() {
-        
+		
     }
 
     void Update() {
-        
+		
     }
+
+	public void Explode() {
+
+	}
 
 	private void OnDrawGizmos() {
 		if (_showGizmos) {
