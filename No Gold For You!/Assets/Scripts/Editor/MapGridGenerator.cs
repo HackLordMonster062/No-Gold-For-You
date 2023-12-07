@@ -13,7 +13,7 @@ public class MapGridGenerator : Editor {
 		}
 
 		if (GUILayout.Button("Load Default File")) {
-			string levelName = "Level1"; // TODO: make it use the levelmanager level name
+			string levelName = "Level1";
 
 			string path = "Assets/Resources/GridPresets/" + levelName + "GridPreset.asset";
 			GridPreset gridPreset = AssetDatabase.LoadAssetAtPath<GridPreset>(path);
@@ -46,7 +46,7 @@ public class MapGridGenerator : Editor {
 
 		manager.grid = listGrid.ToArray();
 
-		string levelName = "Level1"; // TODO: make it use the levelmanager level name
+		string levelName = LevelManager.Instance.currLevelInfo.levelName;
 
 		string path = "Assets/Resources/GridPresets/" + levelName + "GridPreset.asset";
 

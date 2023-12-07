@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : TManager<GameManager> {
     // Global Variables
@@ -15,8 +16,14 @@ public class GameManager : TManager<GameManager> {
     // Global events
     public static event Action<GameState> OnBeforeStateChange;
     public static event Action<GameState> OnAfterStateChange;
-	
-    void Start() {
+
+	protected override void Awake() {
+        base.Awake();
+
+        SceneManager.sceneLoaded += InitiateLevel;
+	}
+
+	void Start() {
         ChangeState(GameState.LoadingLevel);
     }
 
@@ -30,7 +37,9 @@ public class GameManager : TManager<GameManager> {
 		}
 	}
 
-    void InitiateLevel() {
+    void InitiateLevel(Scene scene, LoadSceneMode mode) {
+        if (scene.name.CompareTo(LevelManager.Instance.currLevelInfo.sceneName) != 0) return;
+
         ChangeState(GameState.Initializing);
     }
 
@@ -46,17 +55,21 @@ public class GameManager : TManager<GameManager> {
 				player = GameObject.FindGameObjectWithTag("Player").transform;
 				toolManager = player.GetComponent<ToolManager>();
 
-                timer = 20; //TODO
+                timer = LevelManager.Instance.currLevelInfo.startTime;
 				break;
             case GameState.Playing:
                 Time.timeScale = 1;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+
+                UIManager.Instance.SetPause(false);
                 break;
             case GameState.Paused:
                 Time.timeScale = 0;
 				Cursor.lockState = CursorLockMode.None;
 				Cursor.visible = true;
+
+                UIManager.Instance.SetPause(true);
 				break;
             case GameState.LevelEnd:
                 Time.timeScale = 0;

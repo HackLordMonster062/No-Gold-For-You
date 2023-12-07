@@ -10,8 +10,10 @@ public class SuspicionManager : TManager<SuspicionManager> {
 
     float _suspicionLevelRaw;
 	
-    void Start() {
-        
+    protected override void Awake() {
+        base.Awake();
+
+        GameManager.OnBeforeStateChange += InitiateSuspicion;
     }
 
     void Update() {
@@ -26,6 +28,12 @@ public class SuspicionManager : TManager<SuspicionManager> {
         if (suspicionLevel == 3) {
             GameManager.Instance.ChangeState(GameState.Caught);
         }
+    }
+
+    void InitiateSuspicion(GameState state) {
+        if (state != GameState.Initializing) return;
+
+        _suspicionLevelRaw = LevelManager.Instance.currLevelInfo.startSuspicion;
     }
 
     public void Penalty(float amount) {
