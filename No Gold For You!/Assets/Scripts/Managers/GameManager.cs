@@ -18,8 +18,6 @@ public class GameManager : TManager<GameManager> {
 	
     void Start() {
         ChangeState(GameState.LoadingLevel);
-        ChangeState(GameState.Initializing);
-        ChangeState(GameState.Playing);
     }
 
     void Update() {
@@ -32,12 +30,17 @@ public class GameManager : TManager<GameManager> {
 		}
 	}
 
+    void InitiateLevel() {
+        ChangeState(GameState.Initializing);
+    }
+
     public void ChangeState(GameState state) {
         OnBeforeStateChange?.Invoke(state);
         currState = state;
 
         switch (state) {
             case GameState.LoadingLevel:
+                LevelManager.Instance.LoadLevel();
                 break;
             case GameState.Initializing:
 				player = GameObject.FindGameObjectWithTag("Player").transform;
