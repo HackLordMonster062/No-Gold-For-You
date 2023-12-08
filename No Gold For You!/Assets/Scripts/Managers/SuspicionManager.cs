@@ -5,10 +5,10 @@ public class SuspicionManager : TManager<SuspicionManager> {
     [SerializeField] float suspicionFadingRate;
     [SerializeField] float suspicionPenaltyAmount;
 
-	public int suspicionLevel { get; private set; }
     public int suspectingMiners { get; set; }
 
-    float _suspicionLevelRaw;
+	public int suspicionLevel { get; private set; }
+    public float suspicionLevelRaw { get; private set; }
 	
     protected override void Awake() {
         base.Awake();
@@ -19,11 +19,11 @@ public class SuspicionManager : TManager<SuspicionManager> {
     void Update() {
         if (GameManager.Instance.currState != GameState.Playing) return;
 
-        _suspicionLevelRaw -= suspicionFadingRate * Time.deltaTime;
-        _suspicionLevelRaw += suspicionRate * suspectingMiners * Time.deltaTime;
+        suspicionLevelRaw -= suspicionFadingRate * Time.deltaTime;
+        suspicionLevelRaw += suspicionRate * suspectingMiners * Time.deltaTime;
 
-        _suspicionLevelRaw = Mathf.Clamp(_suspicionLevelRaw, 0, 3);
-        suspicionLevel = (int)_suspicionLevelRaw;
+        suspicionLevelRaw = Mathf.Clamp(suspicionLevelRaw, 0, 3);
+        suspicionLevel = (int)suspicionLevelRaw;
 
         if (suspicionLevel == 3) {
             GameManager.Instance.ChangeState(GameState.Caught);
@@ -33,14 +33,14 @@ public class SuspicionManager : TManager<SuspicionManager> {
     void InitiateSuspicion(GameState state) {
         if (state != GameState.Initializing) return;
 
-        _suspicionLevelRaw = LevelManager.Instance.currLevelInfo.startSuspicion;
+        suspicionLevelRaw = LevelManager.Instance.currLevelInfo.startSuspicion;
     }
 
     public void Penalty(float amount) {
-        _suspicionLevelRaw += amount;
+        suspicionLevelRaw += amount;
     }
 
     public void Penalty() {
-        _suspicionLevelRaw += suspicionPenaltyAmount;
+        suspicionLevelRaw += suspicionPenaltyAmount;
     }
 }

@@ -10,6 +10,7 @@ public class UIManager : TManager<UIManager> {
     [SerializeField] GameObject timeUpPanelPrefab;
     [SerializeField] GameObject caughtPanelPrefab;
     [SerializeField] GameObject pausePanelPrefab;
+    [SerializeField] GameObject canvasPrefab;
 
     HUD _hudPanel;
 	GameObject _escapedFailPanel;
@@ -17,6 +18,8 @@ public class UIManager : TManager<UIManager> {
 	GameObject _timeUpPanel;
 	GameObject _caughtPanel;
 	GameObject _pausePanel;
+
+    Transform _canvas;
 
 	void Start() {
         
@@ -27,23 +30,24 @@ public class UIManager : TManager<UIManager> {
     }
 
     void InitiateUI() {
-        _hudPanel = Instantiate(hudPanelPrefab).GetComponent<HUD>();
-        _hudPanel.suspicionBar.maxValue = 3;
+        _canvas = FindObjectOfType<Canvas>().transform;
 
-        _pausePanel = Instantiate(pausePanelPrefab);
+        if (_canvas ==  null) {
+            _canvas = Instantiate(canvasPrefab).transform;
+        }
+
+        _hudPanel = Instantiate(hudPanelPrefab, _canvas).GetComponent<HUD>();
+
+        _pausePanel = Instantiate(pausePanelPrefab, _canvas);
 
         _pausePanel.SetActive(false);
     }
 
     public void UpdateHUD(float time, int bombs, float suspicion) {
-        _hudPanel.bombs.text = bombs.ToString();
-
         int minutes = (int)time / 60;
         float seconds = time % 60;
 
-        _hudPanel.timer.text = minutes.ToString() + ":" + seconds.ToString("F1");
-
-        _hudPanel.suspicionBar.value = suspicion;
+        _hudPanel.UpdateHUD(minutes.ToString() + ":" + seconds.ToString("F1"), bombs.ToString(), suspicion);
     }
 
     public void SetPause(bool pause) {
@@ -51,18 +55,18 @@ public class UIManager : TManager<UIManager> {
     }
 
     public void Caught() {
-        _caughtPanel = Instantiate(caughtPanelPrefab);
+        _caughtPanel = Instantiate(caughtPanelPrefab, _canvas);
     }
 
     public void TimeUp() {
-        _timeUpPanel = Instantiate(timeUpPanelPrefab);
+        _timeUpPanel = Instantiate(timeUpPanelPrefab, _canvas);
     }
 
     public void EscapeSuccess() {
-        _escapedSuccessPanel = Instantiate(escapedSuccessPanelPrefab);
+        _escapedSuccessPanel = Instantiate(escapedSuccessPanelPrefab, _canvas);
     }
 
     public void EscapeFail() {
-        _escapedFailPanel = Instantiate(escapedFailPanelPrefab);
+        _escapedFailPanel = Instantiate(escapedFailPanelPrefab, _canvas);
     }
 }

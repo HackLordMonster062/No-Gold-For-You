@@ -1,17 +1,20 @@
+using System;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : TManager<LevelManager> {
 	public LevelInfo currLevelInfo {  get; private set; }
-    public LevelInfo[] levels { get; private set; }
+    public LevelInfo[] levels;
 
     int _currLevelIndex;
-	
-    void Start() {
-        
-    }
 
     void Update() {
         
+    }
+
+    public LevelInfo LoadInfoNoLoad() {
+		currLevelInfo = levels[_currLevelIndex];
+
+		return currLevelInfo;
     }
 
     public LevelInfo LoadLevel(int index) {

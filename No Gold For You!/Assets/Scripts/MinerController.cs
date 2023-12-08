@@ -24,7 +24,11 @@ public class MinerController : MonoBehaviour {
         GameManager.OnBeforeStateChange += Init;
     }
 
-    void Init(GameState state) {
+	private void OnDestroy() {
+		GameManager.OnAfterStateChange -= Init;
+	}
+
+	void Init(GameState state) {
         if (state != GameState.Initializing) return;
 
 		navAgent = GetComponent<NavMeshAgent>();

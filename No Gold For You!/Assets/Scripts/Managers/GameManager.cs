@@ -20,10 +20,10 @@ public class GameManager : TManager<GameManager> {
 	protected override void Awake() {
         base.Awake();
 
-        SceneManager.sceneLoaded += InitiateLevel;
 	}
 
 	void Start() {
+        SceneManager.sceneLoaded += InitiateLevel;
         ChangeState(GameState.LoadingLevel);
     }
 
@@ -32,20 +32,25 @@ public class GameManager : TManager<GameManager> {
 
 		timer -= Time.deltaTime;
 
+        UIManager.Instance.UpdateHUD(timer, toolManager.bombs, SuspicionManager.Instance.suspicionLevelRaw);
+
 		if (timer <= 0) {
 			ChangeState(GameState.TimeUp);
 		}
 	}
 
     void InitiateLevel(Scene scene, LoadSceneMode mode) {
-        if (scene.name.CompareTo(LevelManager.Instance.currLevelInfo.sceneName) != 0) return;
+        if (LevelManager.Instance == null || scene.name.CompareTo(LevelManager.Instance.currLevelInfo.sceneName) != 0) return;
 
         ChangeState(GameState.Initializing);
+        ChangeState(GameState.Playing);
     }
 
     public void ChangeState(GameState state) {
         OnBeforeStateChange?.Invoke(state);
         currState = state;
+
+        print(currState);
 
         switch (state) {
             case GameState.LoadingLevel:
