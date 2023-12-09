@@ -25,7 +25,7 @@ public class MinerController : MonoBehaviour {
     }
 
 	private void OnDestroy() {
-		GameManager.OnAfterStateChange -= Init;
+		GameManager.OnBeforeStateChange -= Init;
 	}
 
 	void Init(GameState state) {

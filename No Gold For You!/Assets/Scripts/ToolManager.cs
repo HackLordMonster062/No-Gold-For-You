@@ -26,7 +26,11 @@ public class ToolManager : MonoBehaviour {
         GameManager.OnBeforeStateChange += Init;
 	}
 
-    void Init(GameState state) {
+	private void OnDestroy() {
+		GameManager.OnBeforeStateChange -= Init;
+	}
+
+	void Init(GameState state) {
         if (state != GameState.Initializing) return;
 
         ChangeTool(Tool.Pickaxe);

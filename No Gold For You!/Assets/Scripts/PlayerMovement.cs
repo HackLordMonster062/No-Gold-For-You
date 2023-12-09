@@ -34,6 +34,10 @@ public class PlayerMovement : MonoBehaviour {
 		GameManager.OnBeforeStateChange += Init;
 	}
 
+	private void OnDestroy() {
+		GameManager.OnBeforeStateChange -= Init;
+	}
+
 	void Init(GameState state) {
 		if (state != GameState.Initializing) return;
 

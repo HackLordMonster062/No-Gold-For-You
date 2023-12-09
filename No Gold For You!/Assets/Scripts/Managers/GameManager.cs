@@ -50,8 +50,6 @@ public class GameManager : TManager<GameManager> {
         OnBeforeStateChange?.Invoke(state);
         currState = state;
 
-        print(currState);
-
         switch (state) {
             case GameState.LoadingLevel:
                 LevelManager.Instance.LoadLevel();
