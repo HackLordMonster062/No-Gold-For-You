@@ -22,15 +22,15 @@ public class UIManager : TManager<UIManager> {
     Transform _canvas;
 
 	void Start() {
-        
+        GameManager.OnBeforeStateChange += InitiateUI;
     }
 
     void Update() {
         
     }
 
-    void InitiateUI() {
-        _canvas = FindObjectOfType<Canvas>().transform;
+    void InitiateUI(GameState state) {
+        if (state != GameState.Initializing) return;
 
         if (_canvas ==  null) {
             _canvas = Instantiate(canvasPrefab).transform;
@@ -47,7 +47,7 @@ public class UIManager : TManager<UIManager> {
         int minutes = (int)time / 60;
         float seconds = time % 60;
 
-        _hudPanel.UpdateHUD(minutes.ToString() + ":" + seconds.ToString("F1"), bombs.ToString(), suspicion);
+        _hudPanel.UpdateHUD(minutes.ToString() + ":" + seconds.ToString("00.00"), bombs.ToString(), suspicion);
     }
 
     public void SetPause(bool pause) {

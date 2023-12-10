@@ -24,8 +24,8 @@ public class GameManager : TManager<GameManager> {
 
 	void Start() {
         SceneManager.sceneLoaded += InitiateLevel;
-        ChangeState(GameState.LoadingLevel);
-    }
+        StartCurrLevel();
+	}
 
     void Update() {
 		if (currState != GameState.Playing) return;
@@ -39,11 +39,24 @@ public class GameManager : TManager<GameManager> {
 		}
 	}
 
+    public void StartCurrLevel() {
+		LevelManager.Instance.LoadLevel();
+		ChangeState(GameState.LoadingLevel);
+	}
+
     void InitiateLevel(Scene scene, LoadSceneMode mode) {
         if (LevelManager.Instance == null || scene.name.CompareTo(LevelManager.Instance.currLevelInfo.sceneName) != 0) return;
 
         ChangeState(GameState.Initializing);
         ChangeState(GameState.Playing);
+    }
+
+    public void TogglePause(bool pause) {
+        if (pause && currState == GameState.Paused) {
+			ChangeState(GameState.Playing);
+		} else if (!pause &&  currState == GameState.Playing) {
+            ChangeState(GameState.Paused);
+        }
     }
 
     public void ChangeState(GameState state) {
@@ -52,7 +65,6 @@ public class GameManager : TManager<GameManager> {
 
         switch (state) {
             case GameState.LoadingLevel:
-                LevelManager.Instance.LoadLevel();
                 break;
             case GameState.Initializing:
 				player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -76,15 +88,20 @@ public class GameManager : TManager<GameManager> {
 				break;
             case GameState.LevelEnd:
                 Time.timeScale = 0;
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
 				Debug.Log(ExplosionManager.Instance.Explode());
                 break;
             case GameState.Escaped:
+                UIManager.Instance.EscapeSuccess();
                 ChangeState(GameState.LevelEnd);
                 break;
             case GameState.TimeUp:
+                UIManager.Instance.TimeUp();
 				ChangeState(GameState.LevelEnd);
                 break;
             case GameState.Caught:
+                UIManager.Instance.Caught();
                 ChangeState(GameState.LevelEnd);
                 break;
         }

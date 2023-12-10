@@ -33,6 +33,8 @@ public class SuspicionManager : TManager<SuspicionManager> {
     void InitiateSuspicion(GameState state) {
         if (state != GameState.Initializing) return;
 
+        suspectingMiners = 0;
+
         suspicionLevelRaw = LevelManager.Instance.currLevelInfo.startSuspicion;
     }
 
