@@ -14,7 +14,6 @@ public class SuspiciousState : TState {
 
 		ToolManager.OnPlayerMined += () => _playerMining = true;
 		ToolManager.OnPlayerDumped += () => _playerDumped = true;
-		ToolManager.OnPlayerDroppedBomb += () => SuspicionManager.Instance.Penalty();
 	}
 
 	public override void Enter() {
@@ -24,6 +23,7 @@ public class SuspiciousState : TState {
 		_playerDumped = false;
 
 		_suspiciousSM.currState.Enter();
+		ToolManager.OnPlayerDroppedBomb += Penalize;
 	}
 
 	public override Type Update() {
@@ -55,5 +55,10 @@ public class SuspiciousState : TState {
 		SuspicionManager.Instance.suspectingMiners--;
 
 		_suspiciousSM.currState.Exit();
+		ToolManager.OnPlayerDroppedBomb -= Penalize;
+	}
+
+	void Penalize() {
+		SuspicionManager.Instance.Penalty();
 	}
 }

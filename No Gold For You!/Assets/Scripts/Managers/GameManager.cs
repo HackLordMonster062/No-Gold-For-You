@@ -17,6 +17,10 @@ public class GameManager : TManager<GameManager> {
     public static event Action<GameState> OnBeforeStateChange;
     public static event Action<GameState> OnAfterStateChange;
 
+    float _destructionPerc;
+    int _bombsUsed;
+    float _timeTaken;
+
 	protected override void Awake() {
         base.Awake();
 
@@ -28,6 +32,10 @@ public class GameManager : TManager<GameManager> {
 	}
 
     void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            TogglePause(currState == GameState.Playing);
+        }
+
 		if (currState != GameState.Playing) return;
 
 		timer -= Time.deltaTime;
@@ -51,12 +59,20 @@ public class GameManager : TManager<GameManager> {
         ChangeState(GameState.Playing);
     }
 
+    void CalculateScores() {
+		_destructionPerc = ExplosionManager.Instance.Explode();
+        _bombsUsed = LevelManager.Instance.currLevelInfo.startBombs - toolManager.bombs;
+        _timeTaken = LevelManager.Instance.currLevelInfo.startTime - timer;
+	}
+
     public void TogglePause(bool pause) {
-        if (pause && currState == GameState.Paused) {
+        if (!pause) {
 			ChangeState(GameState.Playing);
-		} else if (!pause &&  currState == GameState.Playing) {
+		} else {
             ChangeState(GameState.Paused);
         }
+
+        UIManager.Instance.SetPause(pause);
     }
 
     public void ChangeState(GameState state) {
@@ -90,19 +106,23 @@ public class GameManager : TManager<GameManager> {
                 Time.timeScale = 0;
 				Cursor.lockState = CursorLockMode.None;
 				Cursor.visible = true;
-				Debug.Log(ExplosionManager.Instance.Explode());
+                CalculateScores();
                 break;
             case GameState.Escaped:
-                UIManager.Instance.EscapeSuccess();
                 ChangeState(GameState.LevelEnd);
+
+                if (_destructionPerc >= LevelManager.Instance.currLevelInfo.requiredDestruction)
+                    UIManager.Instance.EscapeSuccess(_destructionPerc, _bombsUsed, _timeTaken);
+                else
+                    UIManager.Instance.EscapeFail(_destructionPerc, _bombsUsed);
                 break;
             case GameState.TimeUp:
-                UIManager.Instance.TimeUp();
 				ChangeState(GameState.LevelEnd);
+                UIManager.Instance.TimeUp(_destructionPerc, _bombsUsed);
                 break;
             case GameState.Caught:
-                UIManager.Instance.Caught();
                 ChangeState(GameState.LevelEnd);
+                UIManager.Instance.Caught(_destructionPerc, _bombsUsed);
                 break;
         }
 

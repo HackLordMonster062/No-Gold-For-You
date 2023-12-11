@@ -36,7 +36,7 @@ public class ToolManager : MonoBehaviour {
         ChangeTool(Tool.Pickaxe);
 
         _cameraRef = Camera.main.transform;
-        bombs = 5;
+        bombs = LevelManager.Instance.currLevelInfo.startBombs;
 	}
 
     void Update() {
@@ -112,7 +112,6 @@ public class ToolManager : MonoBehaviour {
             MiningSpot miningSpot = hitInfo.collider.GetComponent<MiningSpot>();
 
             if (miningSpot != null && miningSpot.Mine()) {
-                print(miningSpot);
                 ChangeTool(Tool.Gold);
             }
         }

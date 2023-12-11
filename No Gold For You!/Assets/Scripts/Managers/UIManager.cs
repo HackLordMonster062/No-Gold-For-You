@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ public class UIManager : TManager<UIManager> {
     [SerializeField] GameObject canvasPrefab;
 
     HUD _hudPanel;
-	GameObject _escapedFailPanel;
-	GameObject _escapedSuccessPanel;
-	GameObject _timeUpPanel;
-	GameObject _caughtPanel;
+	EscapeFailScreen _escapedFailPanel;
+	SuccessScreen _escapedSuccessPanel;
+	TimeUpScreen _timeUpPanel;
+	CaughtScreen _caughtPanel;
 	GameObject _pausePanel;
 
     Transform _canvas;
@@ -54,19 +55,27 @@ public class UIManager : TManager<UIManager> {
         _pausePanel.SetActive(pause);
     }
 
-    public void Caught() {
-        _caughtPanel = Instantiate(caughtPanelPrefab, _canvas);
+    public void Caught(float destruction, int bombs) {
+        _caughtPanel = Instantiate(caughtPanelPrefab, _canvas).GetComponent<CaughtScreen>();
+
+        _caughtPanel.SetDetails(destruction, bombs);
     }
 
-    public void TimeUp() {
-        _timeUpPanel = Instantiate(timeUpPanelPrefab, _canvas);
-    }
+    public void TimeUp(float destruction, int bombs) {
+        _timeUpPanel = Instantiate(timeUpPanelPrefab, _canvas).GetComponent<TimeUpScreen>();
 
-    public void EscapeSuccess() {
-        _escapedSuccessPanel = Instantiate(escapedSuccessPanelPrefab, _canvas);
-    }
+        _timeUpPanel.SetDetails(destruction, bombs);
+	}
 
-    public void EscapeFail() {
-        _escapedFailPanel = Instantiate(escapedFailPanelPrefab, _canvas);
-    }
+    public void EscapeSuccess(float destruction, int bombs, float time) {
+        _escapedSuccessPanel = Instantiate(escapedSuccessPanelPrefab, _canvas).GetComponent<SuccessScreen>();
+
+        _escapedSuccessPanel.SetDetails(destruction, bombs, time);
+	}
+
+    public void EscapeFail(float destruction, int bombs) {
+        _escapedFailPanel = Instantiate(escapedFailPanelPrefab, _canvas).GetComponent<EscapeFailScreen>();
+
+        _escapedFailPanel.SetDetails(destruction, bombs);
+	}
 }

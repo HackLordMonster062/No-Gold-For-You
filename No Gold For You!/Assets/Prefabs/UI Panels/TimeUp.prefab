@@ -257,7 +257,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3238626924630437531}
+      - m_Target: {fileID: 7390031944159242914}
         m_TargetAssemblyTypeName: EndScreen, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -417,7 +417,7 @@ GameObject:
   - component: {fileID: 4127325207084247792}
   - component: {fileID: 1492128238606908088}
   - component: {fileID: 3826630365664854642}
-  - component: {fileID: 3238626924630437531}
+  - component: {fileID: 7390031944159242914}
   m_Layer: 5
   m_Name: TimeUp
   m_TagString: Untagged
@@ -488,7 +488,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3238626924630437531
+--- !u!114 &7390031944159242914
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -497,9 +497,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4126622305250600988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63d718b0eca1b7c4788dbb7d2e072d16, type: 3}
+  m_Script: {fileID: 11500000, guid: 1542373f99a15ff4388ce1d3c90d69ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destructionPerc: {fileID: 160988728714314248}
+  bombsCount: {fileID: 4713010172753665422}
 --- !u!1 &4190968182928922533
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +624,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3238626924630437531}
+      - m_Target: {fileID: 7390031944159242914}
         m_TargetAssemblyTypeName: EndScreen, Assembly-CSharp
         m_MethodName: Exit
         m_Mode: 1

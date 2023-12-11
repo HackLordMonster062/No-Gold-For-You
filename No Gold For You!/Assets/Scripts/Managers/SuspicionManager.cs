@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SuspicionManager : TManager<SuspicionManager> {
     [SerializeField] float suspicionRate;
+    [SerializeField] float suspicionRateLow;
+    [SerializeField] float suspicionRateVeryLow;
     [SerializeField] float suspicionFadingRate;
     [SerializeField] float suspicionPenaltyAmount;
 
@@ -9,6 +11,8 @@ public class SuspicionManager : TManager<SuspicionManager> {
 
 	public int suspicionLevel { get; private set; }
     public float suspicionLevelRaw { get; private set; }
+
+    float _currSuspicionRate;
 	
     protected override void Awake() {
         base.Awake();
@@ -19,8 +23,16 @@ public class SuspicionManager : TManager<SuspicionManager> {
     void Update() {
         if (GameManager.Instance.currState != GameState.Playing) return;
 
-        suspicionLevelRaw -= suspicionFadingRate * Time.deltaTime;
-        suspicionLevelRaw += suspicionRate * suspectingMiners * Time.deltaTime;
+        if (GameManager.Instance.toolManager.currTool == Tool.Bomb)
+            _currSuspicionRate = suspicionRate;
+        else if (suspicionLevelRaw <= 2)
+            _currSuspicionRate = suspicionRateLow;
+        else
+            _currSuspicionRate = suspicionRateVeryLow;
+
+
+		suspicionLevelRaw -= suspicionFadingRate * Time.deltaTime;
+        suspicionLevelRaw += _currSuspicionRate * suspectingMiners * Time.deltaTime;
 
         suspicionLevelRaw = Mathf.Clamp(suspicionLevelRaw, 0, 3);
         suspicionLevel = (int)suspicionLevelRaw;

@@ -252,8 +252,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   suspicionRate: 1
-  suspicionFadingRate: 0
-  suspicionPenaltyAmount: 0
+  suspicionRateLow: 0.3
+  suspicionRateVeryLow: 0.25
+  suspicionFadingRate: 0.1
+  suspicionPenaltyAmount: 0.5
 --- !u!4 &243803935
 Transform:
   m_ObjectHideFlags: 0

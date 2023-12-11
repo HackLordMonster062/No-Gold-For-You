@@ -17,3 +17,4 @@ MonoBehaviour:
   gridPreset: {fileID: 11400000, guid: bf92b34c669921f408c7498f5bddbbe6, type: 2}
   startTime: 70
   startSuspicion: 0
+  startBombs: 10

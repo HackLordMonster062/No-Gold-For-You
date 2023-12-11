@@ -530,7 +530,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 585489995562811063}
+      - m_Target: {fileID: 3015476557132990993}
         m_TargetAssemblyTypeName: EndScreen, Assembly-CSharp
         m_MethodName: Exit
         m_Mode: 1
@@ -1070,7 +1070,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 585489995562811063}
+      - m_Target: {fileID: 3015476557132990993}
         m_TargetAssemblyTypeName: EndScreen, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -1093,7 +1093,7 @@ GameObject:
   - component: {fileID: 7397656144961081858}
   - component: {fileID: 740456276647874169}
   - component: {fileID: 6181165786989696304}
-  - component: {fileID: 585489995562811063}
+  - component: {fileID: 3015476557132990993}
   m_Layer: 5
   m_Name: Insufficient
   m_TagString: Untagged
@@ -1164,7 +1164,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &585489995562811063
+--- !u!114 &3015476557132990993
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1173,9 +1173,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8819809011046066671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63d718b0eca1b7c4788dbb7d2e072d16, type: 3}
+  m_Script: {fileID: 11500000, guid: 9bf561fd53551334f8616f8a5833c627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destructionPerc: {fileID: 8998266834974857922}
+  bombsCount: {fileID: 702613828050677045}
 --- !u!1 &9056248736622242606
 GameObject:
   m_ObjectHideFlags: 0
