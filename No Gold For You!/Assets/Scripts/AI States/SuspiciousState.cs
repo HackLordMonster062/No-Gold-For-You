@@ -13,7 +13,7 @@ public class SuspiciousState : TState {
 		_suspiciousSM.AddState(new ObservingState(owner));
 
 		ToolManager.OnPlayerMined += () => _playerMining = true;
-		ToolManager.OnPlayerDumped += () => _playerDumped = true;
+		Crate.OnGoldInCrate += () => _playerDumped = true;
 	}
 
 	public override void Enter() {

@@ -15,6 +15,9 @@ MonoBehaviour:
   levelName: Level1
   sceneName: SampleScene
   gridPreset: {fileID: 11400000, guid: bf92b34c669921f408c7498f5bddbbe6, type: 2}
-  startTime: 70
+  startTime: 10
   startSuspicion: 0
   startBombs: 10
+  requiredTime: 0
+  requiredBombs: 0
+  requiredDestruction: 0.6
